@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
+    <title>O Project Media List</title>
+
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link href="//amp.azure.net/libs/amp/1.8.3/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
+    <script src="//amp.azure.net/libs/amp/1.8.3/azuremediaplayer.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>1988 </h1><a class="pull-right" href="index.html">목록으로</a>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <video id="azuremediaplayer" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"></video>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">© 2017 O Project. v0.1</p>
+        </div>
+    </footer>
+
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var myOptions = {
+            "nativeControlsForTouch": false,
+            controls: true,
+            autoplay: true,
+            width: "640",
+            height: "400",
+        }
+        myPlayer = amp("azuremediaplayer", myOptions);
+        myPlayer.src([
+            {
+                "src": "http://odkcdnver-odkams.streaming.mediaservices.windows.net/addd6fa3-94fa-4066-891c-f15174ac985c/1988_01.ism/manifest(format=m3u8-aapl)",
+                "type": "video/mp4"
+            }
+        ]);
+    </script>
+</body>
+</html>
