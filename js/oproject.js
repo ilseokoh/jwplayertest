@@ -5,12 +5,15 @@
     var bufferingcount = 0;
     $('#bufferingcount').text("bufferingcount: " + bufferingcount);
 
-    $(window).resize(function () {
-        // 사이즈 측정해서 Player 크기 조정
-        w = $('#playercontainer').width();
-        h = $('#playercontainer').height();
-        playerInstance.resize(w, h);
-    });
+    w = $('#playercontainer').width();
+    h = $('#playercontainer').height();
+
+    //$(window).resize(function () {
+    //    // 사이즈 측정해서 Player 크기 조정
+    //    w = $('#playercontainer').width();
+    //    h = $('#playercontainer').height();
+    //    playerInstance.resize(w, h);
+    //});
     var content = $('#videoplayer').attr("data-url");
     var poster = $('#videoplayer').attr("data-img");
     var playerInstance = jwplayer("videoplayer");
