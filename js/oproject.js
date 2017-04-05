@@ -2,6 +2,9 @@
     jwplayer.key = "PIowX3TUsIpHoErK68P3XNWtyMU/gpbuonLbtXvDllg=";
     var w = 720;
     var h = 480;
+    var bufferingcount = 0;
+    $('#bufferingcount').text("bufferingcount: " + bufferingcount);
+
     $(window).resize(function () {
         // 사이즈 측정해서 Player 크기 조정
         w = $('#playercontainer').width();
@@ -26,6 +29,7 @@
         var currpos = (data.position / data.duration) * 100;
         var bufferedDiff = data.bufferPercent - currpos;
         //console.log("Remain buffer: " + bufferedDiff + "%");
+        $('#buffer').text("buffer: " + bufferedDiff + "%");
     });
 
     var time1 = 0;
@@ -48,18 +52,24 @@
         console.log("setupError: " + event.message);
     });
 
-    playerInstance.on('meta', function (e) {
-        if (e.metadata.streamType != null && e.metadata.streamType == "VOD") {
-            console.log("meta: loadtime " + "&loadtime=" + e.metadata.segment.loadTime + "&network=" + e.metadata.bandwidth + "&bandwidth=" + e.metadata.segment.bandwidth + "&duration=" + e.metadata.segment.duration + "&width=" + e.metadata.width + "&size=" + parseInt(e.metadata.segment.size / 8));
-        }
-    });
+    //playerInstance.on('meta', function (e) {
+    //    if (e.metadata.streamType != null && e.metadata.streamType == "VOD") {
+    //        console.log("meta: loadtime " + "&loadtime=" + e.metadata.segment.loadTime + "&network=" + e.metadata.bandwidth + "&bandwidth=" + e.metadata.segment.bandwidth + "&duration=" + e.metadata.segment.duration + "&width=" + e.metadata.width + "&size=" + parseInt(e.metadata.segment.size / 8));
+    //    }
+    //});
 
     playerInstance.on('firstFrame', function (event) {
         console.log("firstframe: " + event.loadTime + "ms");
+        $('#firstframe').text("firstframe: " + event.loadTime + "ms");
     });
 
     playerInstance.on('buffer', function (event) {
         console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason)
+        if (event.reason != 'loading' || event.reason != 'complete') {
+            bufferingcount += 1;
+            $('#bufferingcount').text("bufferingcount: " + bufferingcount + "(원인:" + event.reason);
+        }
+        
     });
 
     playerInstance.on('complete', function (event) {
@@ -81,6 +91,7 @@
 
     playerInstance.on('visualQuality', function (e) {
         console.log("visual quality changed: " + e.label + " because " + e.reason);
+        $('#quality').text("visual quality: " + e.label);
     });
 
 }());
