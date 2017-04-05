@@ -5,8 +5,8 @@
     var bufferingcount = 0;
     $('#bufferingcount').text("bufferingcount: " + bufferingcount);
 
-    w = $('#playercontainer').width();
-    h = $('#playercontainer').height();
+    //w = $('#playercontainer').width();
+    //h = $('#playercontainer').height();
 
     //$(window).resize(function () {
     //    // 사이즈 측정해서 Player 크기 조정
