@@ -1,4 +1,4 @@
-(function () {
+Ôªø(function () {
     jwplayer.key = "PIowX3TUsIpHoErK68P3XNWtyMU/gpbuonLbtXvDllg=";
     var w = 720;
     var h = 480;
@@ -6,7 +6,7 @@
     $('#bufferingcount').text("bufferingcount: " + bufferingcount);
 
     $(window).resize(function () {
-        // ªÁ¿Ã¡Ó √¯¡§«ÿº≠ Player ≈©±‚ ¡∂¡§
+        // ÏÇ¨Ïù¥Ï¶à Ï∏°Ï†ïÌï¥ÏÑú Player ÌÅ¨Í∏∞ Ï°∞Ï†ï
         w = $('#playercontainer').width();
         h = $('#playercontainer').height();
     });
@@ -67,9 +67,8 @@
         console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason)
         if (event.reason != 'loading' || event.reason != 'complete') {
             bufferingcount += 1;
-            $('#bufferingcount').text("bufferingcount: " + bufferingcount + "(ø¯¿Œ:" + event.reason);
+            $('#bufferingcount').text("bufferingcount: " + bufferingcount + "(ÏõêÏù∏:" + event.reason + ")");
         }
-        
     });
 
     playerInstance.on('complete', function (event) {
@@ -80,18 +79,9 @@
         console.log("error: " + event.message);
     });
 
-    var levels;
-    playerInstance.on('levels', function (e) {
-        levels = e.levels;
-    });
-
-    playerInstance.on('levelsChanged', function (e) {
-        console.log("current quality: " + levels[e.currentQuality]);
-    });
-
     playerInstance.on('visualQuality', function (e) {
-        console.log("visual quality changed: " + e.label + " because " + e.reason);
-        $('#quality').text("visual quality: " + e.label);
+        console.log("visual quality changed: " + e.level.label + " because " + e.reason);
+        $('#quality').text("visual quality: " + e.level.label + " (ÏõêÏù∏:" + event.reason + ")");
     });
 
 }());
