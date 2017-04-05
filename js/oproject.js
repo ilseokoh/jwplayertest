@@ -25,7 +25,7 @@
     playerInstance.on('bufferChange', function (data) {
         var currpos = (data.position / data.duration) * 100;
         var bufferedDiff = data.bufferPercent - currpos;
-        console.log("Remain buffer: " + bufferedDiff + "%");
+        //console.log("Remain buffer: " + bufferedDiff + "%");
     });
 
     var time1 = 0;
@@ -40,7 +40,7 @@
             first_play = false;
             // TODO: Generate ID and log here
             console.log("first play : " + new Date());
-            console.log("" + jwPlayer().getCurrentQuality());
+            console.log("getCurrentQuality: " + playerInstance.getCurrentQuality());
         }
     });
 
