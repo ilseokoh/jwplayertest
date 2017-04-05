@@ -16,7 +16,7 @@
     playerInstance.setup({
         width: w,
         height: h,
-        autostart: "false",
+        autostart: "true",
         "primary": "flash",
         "hlshtml": false,
         "image": poster,
