@@ -9,6 +9,7 @@
         // 사이즈 측정해서 Player 크기 조정
         w = $('#playercontainer').width();
         h = $('#playercontainer').height();
+        playerInstance.resize(w, h);
     });
     var content = $('#videoplayer').attr("data-url");
     var poster = $('#videoplayer').attr("data-img");
@@ -29,7 +30,7 @@
         var currpos = (data.position / data.duration) * 100;
         var bufferedDiff = data.bufferPercent - currpos;
         //console.log("Remain buffer: " + bufferedDiff + "%");
-        $('#buffer').text("buffer: " + bufferedDiff + "%");
+        $('#buffer').text("buffer: " + bufferedDiff.toFixed(2) + " %");
     });
 
     var time1 = 0;
@@ -60,14 +61,14 @@
 
     playerInstance.on('firstFrame', function (event) {
         console.log("firstframe: " + event.loadTime + "ms");
-        $('#firstframe').text("firstframe: " + event.loadTime + "ms");
+        $('#firstframe').text("firstframe: " + parseInt(event.loadTime) + " ms");
     });
 
     playerInstance.on('buffer', function (event) {
         console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason)
         if (event.reason != 'loading' || event.reason != 'complete') {
             bufferingcount += 1;
-            $('#bufferingcount').text("bufferingcount: " + bufferingcount + "(원인:" + event.reason + ")");
+            $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
         }
     });
 
@@ -81,7 +82,7 @@
 
     playerInstance.on('visualQuality', function (e) {
         console.log("visual quality changed: " + e.level.label + " because " + e.reason);
-        $('#quality').text("visual quality: " + e.level.label + " (원인:" + event.reason + ")");
+        $('#quality').text("visual quality: " + e.level.label + " (원인:" + e.reason + ")");
     });
 
 }());
