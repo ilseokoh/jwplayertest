@@ -8,6 +8,7 @@
         h = $('#playercontainer').height();
     });
     var content = $('#videoplayer').attr("data-url");
+    var poster = $('#videoplayer').attr("data-img");
     var playerInstance = jwplayer("videoplayer");
     playerInstance.setup({
         width: w,
@@ -15,7 +16,7 @@
         autostart: "false",
         "primary": "flash",
         "hlshtml": false,
-        "image": "img/1988.jpg",
+        "image": poster,
         "mediaid": "oproject1",
         "title": "1988 e01",
         file: content,
@@ -30,6 +31,7 @@
     var time1 = 0;
     playerInstance.on('beforePlay', function () {
         if (time1 == 0) time1 = (new Date().getTime() / 1000);
+        console.log("provider: " + playerInstance.getProvider().name)
     });
 
     var first_play = true;
@@ -37,6 +39,8 @@
         if (first_play) {
             first_play = false;
             // TODO: Generate ID and log here
+            console.log("first play : " + new Date());
+            console.log("" + jwPlayer().getCurrentQuality());
         }
     });
 
@@ -45,7 +49,7 @@
     });
 
     playerInstance.on('meta', function (e) {
-        if (e.metadata.streamType !== undefined && e.metadata.streamType == "VOD") {
+        if (e.metadata.streamType != null && e.metadata.streamType == "VOD") {
             console.log("meta: loadtime " + "&loadtime=" + e.metadata.segment.loadTime + "&network=" + e.metadata.bandwidth + "&bandwidth=" + e.metadata.segment.bandwidth + "&duration=" + e.metadata.segment.duration + "&width=" + e.metadata.width + "&size=" + parseInt(e.metadata.segment.size / 8));
         }
     });
@@ -65,4 +69,18 @@
     playerInstance.on('error', function (event) {
         console.log("error: " + event.message);
     });
+
+    var levels;
+    playerInstance.on('levels', function (e) {
+        levels = e.levels;
+    });
+
+    playerInstance.on('levelsChanged', function (e) {
+        console.log("current quality: " + levels[e.currentQuality]);
+    });
+
+    playerInstance.on('visualQuality', function (e) {
+        console.log("visual quality changed: " + e.label + " because " + e.reason);
+    });
+
 }());
