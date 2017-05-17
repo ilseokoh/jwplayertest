@@ -130,34 +130,15 @@
     var trackEvent = function (event, metricsObj) {
         if (window.appInsights) {
             var properties = {
-                StreamId: streamId || "unknown",
+                StreamId: content || "unknown",
                 PluginVersion: pluginVersion,
                 PlayerVersion: playerversion || "unknown",
-                PlaybackTech: playerInstance.getProvider() || "unknown",
+                PlaybackTech: playerInstance.getProvider().name || "unknown",
                 MimeType: "unknown",
                 ProtectionType: "unkown",
                 isLive: "vod",
                 sessionid: sessionid
             };
-
-            //additional logic incase loadedmetadata event hasn't fired to set streamId
-            if (!streamId) {
-                var streamId = content;
-                properties.StreamId = sourceManifest;
-            }
-
-            //additional logic incase loadedmetadata event hasn't fired to set protetction info
-            if (!currentProtectionInfo) {
-                var protectionInfo = "unknown";
-                if (player.options_.sourceList[0]) {
-                    if (player.options_.sourceList[0].protectionInfo) {
-                        protectionInfo = mapProtectionInfo(player.options_.sourceList[0].protectionInfo[0].type);
-                    } else {
-                        protectionInfo = "none";
-                    }
-                }
-                properties.ProtectionType = protectionInfo;
-            }
 
             if (trackSdn) {
                 properties.Sdn = $('#sdn').val() || "none";
