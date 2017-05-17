@@ -74,7 +74,7 @@
         console.log("firstframe: " + event.loadTime + "ms");
         $('#firstframe').text("firstframe: " + parseInt(event.loadTime) + " ms");
 
-        trackEvent("loadTime", { "time": this.loadTime });
+        trackEvent("firstframe", { "time": event.loadTime });
     });
 
     playerInstance.on('buffer', function (event) {
@@ -82,11 +82,10 @@
         $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
 
         bufferingcount += 1;
-        event.count = bufferingcount;
-        trackEvent('buffer', event);
+        trackEvent('buffer', { "count": bufferingcount, "reason": event.reason || "unknown", "oldstate": event.oldstate || "unknown", "newstate": event.newstate || "unknown"});
 
         if (event.reason == "stalled") {
-            trackEvent('rebuffer', event);
+            trackEvent('rebuffer', { "count": bufferingcount, "reason": event.reason || "unknown", "oldstate": event.oldstate || "unknown", "newstate": event.newstate || "unknown" });
         }
     });
 
