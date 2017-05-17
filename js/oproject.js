@@ -74,18 +74,35 @@
         console.log("firstframe: " + event.loadTime + "ms");
         $('#firstframe').text("firstframe: " + parseInt(event.loadTime) + " ms");
 
-        trackEvent("firstframe", { "time": event.loadTime });
+        var properties = {
+            StreamId: content || "unknown",
+            sessionid: sessionid,
+            Sdn: $('#sdn').text() || "none",
+            'currentTime': playerInstance.getPosition(),
+        };
+
+        trackEvent("firstframe", properties, { "time": event.loadTime });
     });
 
     playerInstance.on('buffer', function (event) {
         console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason);
         $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
 
+        var properties = {
+            StreamId: content || "unknown",
+            sessionid: sessionid,
+            Sdn: $('#sdn').text() || "none",
+            'currentTime': playerInstance.getPosition(),
+            "reason": event.reason || "unknown",
+            "oldstate": event.oldstate || "unknown",
+            "newstate": event.newstate || "unknown"
+        };
+
         bufferingcount += 1;
-        trackEvent('buffer', { "count": bufferingcount, "reason": event.reason || "unknown", "oldstate": event.oldstate || "unknown", "newstate": event.newstate || "unknown"});
+        trackEvent('buffer', properties, { "count": bufferingcount});
 
         if (event.reason == "stalled") {
-            trackEvent('rebuffer', { "count": bufferingcount, "reason": event.reason || "unknown", "oldstate": event.oldstate || "unknown", "newstate": event.newstate || "unknown" });
+            trackEvent('rebuffer', properties, {});
         }
     });
 
@@ -99,15 +116,28 @@
     playerInstance.on('error', function (event) {
         console.log("error: " + event.message);
 
-        trackEvent("error", { "message": event.message, 'currentTime': playerInstance.getPosition() || 0});
-
+        var properties = {
+            StreamId: content || "unknown",
+            sessionid: sessionid,
+            Sdn: $('#sdn').text() || "none",
+            'currentTime': playerInstance.getPosition(),
+            "message": event.message,
+        };
+        trackEvent("error", properties, {});
     });
 
     playerInstance.on('visualQuality', function (e) {
         console.log("visual quality changed: " + e.level.width + "x" + e.level.height + " because " + e.reason);
         $('#quality').text("visual quality: " + e.level.width + "x" + e.level.height + " (원인:" + e.reason + ")");
-
-        trackEvent("visualQuality", { "dimension": e.level.width + "x" + e.level.height, "reason": e.reason || "unknown",  'currentTime': playerInstance.getPosition()});
+        var properties = {
+            StreamId: content || "unknown",
+            sessionid: sessionid,
+            Sdn: $('#sdn').text() || "none",
+            'currentTime': playerInstance.getPosition(),
+            "dimension": e.level.width + "x" + e.level.height,
+            "reason": e.reason || "unknown"
+        };
+        trackEvent("visualQuality", properties, {});
     });
 
     var generateUUID = function() {
@@ -126,20 +156,10 @@
     var debug = true;
     var sessionid = generateUUID();
 
-    var trackEvent = function (event, metricsObj) {
-        if (window.appInsights) {
-            var properties = {
-                StreamId: content || "unknown",
-                PluginVersion: pluginVersion,
-                PlayerVersion: playerversion || "unknown",
-                PlaybackTech: playerInstance.getProvider().name || "unknown",
-                MimeType: "unknown",
-                ProtectionType: "unkown",
-                isLive: "vod",
-                sessionid: sessionid,
-                Sdn: $('#sdn').text() || "none"
-            };
 
+
+    var trackEvent = function (event, properties, metricsObj) {
+        if (window.appInsights) {
             var metrics = metricsObj || {};
 
             appInsights.trackEvent(event, properties, metrics);
