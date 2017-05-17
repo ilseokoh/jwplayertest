@@ -7,8 +7,8 @@
 
     $(window).resize(function () {
         // 사이즈 측정해서 Player 크기 조정
-        w = $('#playercontainer').width();
-        h = $('#playercontainer').height();
+        var w = $('#playercontainer').width();
+        var h = w * 9 / 16;
         playerInstance.resize(w, h);
     });
 
@@ -28,8 +28,9 @@
     });
 
     playerInstance.on('playlist', function (data) {
-        w = $('#playercontainer').width();
-        h = $('#playercontainer').height();
+        var w = $('#playercontainer').width();
+        //h = $('#playercontainer').height();
+        var h = w * 9 / 16;
         playerInstance.resize(w, h);
 
     });
@@ -59,6 +60,8 @@
 
     playerInstance.on('setupError', function (event) {
         console.log("setupError: " + event.message);
+        var nexturl = $('#nexturl').attr('href');
+        window.location.href = nexturl;
     });
 
     //playerInstance.on('meta', function (e) {
