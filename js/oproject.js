@@ -25,7 +25,7 @@
         "hlshtml": false,
         "image": poster,
         "mediaid": "oproject1",
-        "title": "1988 e01",
+        "title": "O Project",
         file: content,
     });
 
@@ -84,8 +84,8 @@
     });
 
     playerInstance.on('visualQuality', function (e) {
-        console.log("visual quality changed: " + e.level.label + " because " + e.reason);
-        $('#quality').text("visual quality: " + e.level.label + " (원인:" + e.reason + ")");
+        console.log("visual quality changed: " + e.level.width + "x" + e.level.height + " because " + e.reason);
+        $('#quality').text("visual quality: " + e.level.width + "x" + e.level.height + " (원인:" + e.reason + ")");
     });
 
 }());
