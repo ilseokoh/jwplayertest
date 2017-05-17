@@ -137,12 +137,9 @@
                 MimeType: "unknown",
                 ProtectionType: "unkown",
                 isLive: "vod",
-                sessionid: sessionid
+                sessionid: sessionid,
+                Sdn: $('#sdn').val() || "none"
             };
-
-            if (trackSdn) {
-                properties.Sdn = $('#sdn').val() || "none";
-            }
 
             var metrics = metricsObj || {};
 
