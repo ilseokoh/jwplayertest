@@ -8,6 +8,12 @@
     //w = $('#playercontainer').width();
     //h = $('#playercontainer').height();
 
+    $('#playercontainer').bind('resize', function () {
+        w = $('#playercontainer').width();
+        h = $('#playercontainer').height();
+        playerInstance.resize(w, h);
+    });
+
     //$(window).resize(function () {
     //    // 사이즈 측정해서 Player 크기 조정
     //    w = $('#playercontainer').width();
@@ -27,6 +33,13 @@
         "mediaid": "oproject1",
         "title": "O Project",
         file: content,
+    });
+
+    playerInstance.on('playlist', function (data) {
+        w = $('#playercontainer').width();
+        h = $('#playercontainer').height();
+        playerInstance.resize(w, h);
+
     });
 
     playerInstance.on('bufferChange', function (data) {
