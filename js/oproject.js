@@ -74,7 +74,8 @@
     });
 
     playerInstance.on('buffer', function (event) {
-        console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason)
+        console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason);
+
         if (event.reason != 'loading' || event.reason != 'complete') {
             bufferingcount += 1;
             $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
