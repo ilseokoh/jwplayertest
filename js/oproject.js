@@ -99,7 +99,7 @@
     playerInstance.on('error', function (event) {
         console.log("error: " + event.message);
 
-        trackEvent("error", { "message": event.message, 'currentTime': playerInstance.getPosition() });
+        trackEvent("error", { "message": event.message, 'currentTime': playerInstance.getPosition() || 0});
 
     });
 
@@ -107,7 +107,7 @@
         console.log("visual quality changed: " + e.level.width + "x" + e.level.height + " because " + e.reason);
         $('#quality').text("visual quality: " + e.level.width + "x" + e.level.height + " (원인:" + e.reason + ")");
 
-        trackEvent("visualQuality", { "dimension": e.level.width + "x" + e.level.height, "reason": e.reason, 'currentTime': playerInstance.getPosition()});
+        trackEvent("visualQuality", { "dimension": e.level.width + "x" + e.level.height, "reason": e.reason || "unknown",  'currentTime': playerInstance.getPosition()});
     });
 
     var generateUUID = function() {
@@ -137,7 +137,7 @@
                 ProtectionType: "unkown",
                 isLive: "vod",
                 sessionid: sessionid,
-                Sdn: $('#sdn').val() || "none"
+                Sdn: $('#sdn').text() || "none"
             };
 
             var metrics = metricsObj || {};
