@@ -60,8 +60,6 @@
 
     playerInstance.on('setupError', function (event) {
         console.log("setupError: " + event.message);
-        var nexturl = $('#nexturl').attr('href');
-        window.location.href = nexturl;
     });
 
     //playerInstance.on('meta', function (e) {
@@ -85,6 +83,8 @@
 
     playerInstance.on('complete', function (event) {
         console.log("complete: " + event.message);
+        var nexturl = $('#nexturl').attr('href');
+        window.location.href = nexturl;
     });
 
     playerInstance.on('error', function (event) {
