@@ -15,6 +15,8 @@
     var content = $('#videoplayer').attr("data-url");
     var poster = $('#videoplayer').attr("data-img");
     var playerInstance = jwplayer("videoplayer");
+    
+
     playerInstance.setup({
         width: w,
         height: h,
@@ -71,30 +73,107 @@
     playerInstance.on('firstFrame', function (event) {
         console.log("firstframe: " + event.loadTime + "ms");
         $('#firstframe').text("firstframe: " + parseInt(event.loadTime) + " ms");
+
+        trackEvent("loadTime", { "time": this.loadTime });
     });
 
     playerInstance.on('buffer', function (event) {
         console.log("buffering occurred: from " + event.oldstate + " to " + event.newstate + " because of " + event.reason);
+        $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
 
-        if (event.reason != 'loading' || event.reason != 'complete') {
-            bufferingcount += 1;
-            $('#bufferingcount').text("Buffering count: " + bufferingcount + " (원인:" + event.reason + ")");
+        bufferingcount += 1;
+        event.count = bufferingcount;
+        trackEvent('buffer', event);
+
+        if (event.reason == "stalled") {
+            trackEvent('rebuffer', event);
         }
     });
 
     playerInstance.on('complete', function (event) {
         console.log("complete: " + event.message);
         var nexturl = $('#nexturl').attr('href');
+
         window.location.href = nexturl;
     });
 
     playerInstance.on('error', function (event) {
         console.log("error: " + event.message);
+
+        trackEvent("error", { "message": event.message, 'currentTime': playerInstance.getPosition() });
+
     });
 
     playerInstance.on('visualQuality', function (e) {
         console.log("visual quality changed: " + e.level.width + "x" + e.level.height + " because " + e.reason);
         $('#quality').text("visual quality: " + e.level.width + "x" + e.level.height + " (원인:" + e.reason + ")");
+
+        trackEvent("visualQuality", { "dimension": e.level.width + "x" + e.level.height, "reason": e.reason, 'currentTime': playerInstance.getPosition()});
     });
+
+    var generateUUID = function() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+    };
+
+    var streamId = content;
+    var pluginVersion = "0.2";
+    var playerversion = playerInstance.version.split(".")[0]
+    var debug = true;
+    var sessionid = generateUUID();
+
+    var trackEvent = function (event, metricsObj) {
+        if (window.appInsights) {
+            var properties = {
+                StreamId: streamId || "unknown",
+                PluginVersion: pluginVersion,
+                PlayerVersion: playerversion || "unknown",
+                PlaybackTech: playerInstance.getProvider() || "unknown",
+                MimeType: "unknown",
+                ProtectionType: "unkown",
+                isLive: "vod",
+                sessionid: sessionid
+            };
+
+            //additional logic incase loadedmetadata event hasn't fired to set streamId
+            if (!streamId) {
+                var streamId = content;
+                properties.StreamId = sourceManifest;
+            }
+
+            //additional logic incase loadedmetadata event hasn't fired to set protetction info
+            if (!currentProtectionInfo) {
+                var protectionInfo = "unknown";
+                if (player.options_.sourceList[0]) {
+                    if (player.options_.sourceList[0].protectionInfo) {
+                        protectionInfo = mapProtectionInfo(player.options_.sourceList[0].protectionInfo[0].type);
+                    } else {
+                        protectionInfo = "none";
+                    }
+                }
+                properties.ProtectionType = protectionInfo;
+            }
+
+            if (trackSdn) {
+                properties.Sdn = $('#sdn').val() || "none";
+            }
+
+            var metrics = metricsObj || {};
+
+            appInsights.trackEvent(event, properties, metrics);
+
+            if (debug) {
+                console.log("sent to Application Insights...'event': " + event + "\n'properties': " + JSON.stringify(properties) + "\n'metrics': " + JSON.stringify(metrics));
+            }
+
+        } else if (options.debug) {
+            console.log("App Insights not detected");
+        }
+    }
 
 }());
