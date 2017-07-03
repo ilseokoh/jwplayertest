@@ -51,3 +51,5 @@ gulp.task('minify-css', () => {
 });
 
 gulp.task('default', ['combine-js','compress-html','copy-img','minify-css','watch','server']);
+
+gulp.task('build', ['combine-js','compress-html','copy-img','minify-css']);
