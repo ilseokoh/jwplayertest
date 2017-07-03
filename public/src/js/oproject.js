@@ -64,12 +64,6 @@
         console.log("setupError: " + event.message);
     });
 
-    //playerInstance.on('meta', function (e) {
-    //    if (e.metadata.streamType != null && e.metadata.streamType == "VOD") {
-    //        console.log("meta: loadtime " + "&loadtime=" + e.metadata.segment.loadTime + "&network=" + e.metadata.bandwidth + "&bandwidth=" + e.metadata.segment.bandwidth + "&duration=" + e.metadata.segment.duration + "&width=" + e.metadata.width + "&size=" + parseInt(e.metadata.segment.size / 8));
-    //    }
-    //});
-
     playerInstance.on('firstFrame', function (event) {
         console.log("firstframe: " + event.loadTime + "ms");
         $('#firstframe').text("firstframe: " + parseInt(event.loadTime) + " ms");
