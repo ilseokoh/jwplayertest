@@ -6,13 +6,13 @@ var cleanCSS = require('gulp-clean-css');
 var webserver = require('gulp-webserver');
 var livereload = require('gulp-livereload');
 
-// 웹서버를 localhost:8000 로 실행한다.
+// 개발용 웹서버 실행 localhost:8000 
 gulp.task('server', function () {
 	return gulp.src('public/dist/')
 		.pipe(webserver());
 });
 
-// 파일 변경 감지 및 브라우저 재시작
+// 변경 감지 및 업데이트 
 gulp.task('watch', function () {
 	livereload.listen();
 	gulp.watch('public/src/js/*.js', ['combine-js']);
@@ -22,7 +22,7 @@ gulp.task('watch', function () {
 	gulp.watch('public/dist/**').on('change', livereload.changed);
 });
 
-// 자바스크립트 파일을 하나로 합치고 압축한다.
+// js 파일을 합치고 uglify
 gulp.task('combine-js', function () {
 	return gulp.src('public/src/js/*.js')
 		.pipe(concat('script.js'))
@@ -30,7 +30,7 @@ gulp.task('combine-js', function () {
 		.pipe(gulp.dest('public/dist/js'));
 });
 
-// HTML 파일을 압축한다.
+// HTML 파일 압축 
 gulp.task('compress-html', function () {
 	return gulp.src('public/src/*.html')
 		.pipe(minifyhtml())
