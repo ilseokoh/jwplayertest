@@ -1,8 +1,10 @@
 ﻿(function () {
-    jwplayer.key = "PIowX3TUsIpHoErK68P3XNWtyMU/gpbuonLbtXvDllg=";
+    // Need to puchase to get a key which can enable to play HLS Adaptive Streaming
+    jwplayer.key = "{Your JW Player key}";
     var w = 720;
     var h = 480;
     var bufferingcount = 0;
+
     $('#bufferingcount').text("bufferingcount: " + bufferingcount);
 
     $(window).resize(function () {
@@ -21,10 +23,7 @@
         width: w,
         height: h,
         autostart: "true",
-        "primary": "flash",
-        "hlshtml": false,
         "image": poster,
-        "mediaid": "oproject1",
         "title": "O Project",
         file: content,
     });

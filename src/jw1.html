@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>O Project Media List</title>
+    <title>O Project JW Player</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -13,13 +13,13 @@
 <body>
     <div class="container">
         <div class="page-header">
-            <h1>무한도전 : 어느 멋진 날 - 05/06/2017 <string id="sdn">CDN1</string></h1>
-            <a href="index.html">목록으로</a> | <a id="nexturl" href="jw2.html">다음</a>
+            <h1>Azure Media Service with JW Player</h1>
+            <a href="index.html">Go to contents list</a> 
             <div class="clearfix"></div>
         </div>
         <div class="row">
             <div class="col-md-12 text-center" id="playercontainer">
-                <div id="videoplayer" data-img="img/1988.jpg" data-url="http://odkcdn1.azureedge.net/hls-seg/v1/201705/variety/infinite-challenge/infinite-challenge-e528/playlist_720.m3u8"></div>
+                <div id="videoplayer" data-img="img/amp.jpg" data-url="http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest(format=m3u8-aapl)"></div>
             </div>
         </div>
         <hr />
@@ -53,9 +53,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="http://oproject.azurewebsites.net/jwplayer/jwplayer.js"></script>
-    <script src="js/console.js" type="text/javascript"></script>
-    <script src="js/appinsights.js" type="text/javascript"></script>
-    <script src="js/oproject.js" type="text/javascript"></script>
+    <script src="jwplayer/jwplayer.js"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+
 </body>
 </html>

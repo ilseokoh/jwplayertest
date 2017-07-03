@@ -23,6 +23,7 @@
     "gulp-livereload": "^3.8.1",
     "gulp-minify-html": "^1.0.6",
     "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
     "gulp-webserver": "^0.9.1"
   }
 }
