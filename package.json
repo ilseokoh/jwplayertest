@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/ilseokoh/jwplayertest#readme",
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.5.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-uglify": "^3.0.0",
+    "gulp-webserver": "^0.9.1"
   }
 }
