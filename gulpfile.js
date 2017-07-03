@@ -6,8 +6,7 @@ var cleanCSS = require('gulp-clean-css');
 var webserver = require('gulp-webserver');
 var livereload = require('gulp-livereload');
 var util = require('gulp-util');
-var azure = require('gulp-azure-storage');
-var gzip = require('gulp-gzip');
+var deployCdn = require('gulp-deploy-azure-cdn');
 
 console.log('Production build? : ' + util.env.production);
 
@@ -43,14 +42,6 @@ gulp.task('combine-js', function () {
 	return gulp.src(config.js)
 		.pipe(concat('main.js'))
 		.pipe(config.production ? uglify() : util.noop())
-		.pipe(config.production ? gzip({
-			append: false,
-			threshold: false,
-			gzipOptions: {
-				level: 9,
-				memLevel: 9
-			}
-		}) : util.noop())
 		.pipe(gulp.dest(config.dist + 'js/'));
 });
 
@@ -58,14 +49,6 @@ gulp.task('combine-js', function () {
 gulp.task('compress-html', function () {
 	return gulp.src(config.html)
 		.pipe(config.production ? minifyhtml() : util.noop())
-		.pipe(config.production ? gzip({
-			append: false,
-			threshold: false,
-			gzipOptions: {
-				level: 9,
-				memLevel: 9
-			}
-		}) : util.noop())
 		.pipe(gulp.dest(config.dist));
 });
 
@@ -73,14 +56,6 @@ gulp.task('compress-html', function () {
 gulp.task('minify-css', () => {
   return gulp.src(config.css)
     .pipe(config.production ? cleanCSS({compatibility: 'ie8'}) : util.noop())
-	.pipe(config.production ? gzip({
-			append: false,
-			threshold: false,
-			gzipOptions: {
-				level: 9,
-				memLevel: 9
-			}
-		}) : util.noop())
     .pipe(gulp.dest(config.dist + 'css/'));
 });
 
@@ -96,25 +71,51 @@ gulp.task('copy-jwplayer', function () {
 		.pipe(gulp.dest(config.dist + 'jwplayer/'));
 });
 
-gulp.task('dev', function () { 
-	return gulp.src(config.dist + "**/*.*")
-			.pipe(azure.upload({
-				account: config.azureStorageAccountName,
-				key: config.azureStorageKey,
-				container: 'dev',
+gulp.task('dev-without-gzip', function () { 
+	return gulp.src(config.dist + "**/!(*.css|*.js|*.html)")
+			.pipe(deployCdn({
+                containerName: 'dev',
+                serviceOptions: [config.azureStorageAccountName, config.azureStorageKey],
+                folder:  '',
+                zip: false,
+				concurrentUploadThreads: 10,
 			}));
 });
 
-gulp.task('prod', function () { 
-	return gulp.src(config.dist + '**/*.*')
-			.pipe(azure.upload({
-				account: config.azureStorageAccountName,
-				key: config.azureStorageKey,
-				container: 'prod',
+gulp.task('dev-gzip', function () { 
+	return gulp.src(config.dist + "**/*.{css,js,html}")
+			.pipe(deployCdn({
+                containerName: 'dev',
+                serviceOptions: [config.azureStorageAccountName, config.azureStorageKey],
+                folder:  '',
+                zip: true,
+				concurrentUploadThreads: 10,
+			}));
+});
+
+gulp.task('prod-without-gzip', function () { 
+	return gulp.src(config.dist + '**/!(*.css|*.js|*.html)')
+			.pipe(deployCdn({
+                containerName: 'prod',
+                serviceOptions: [config.azureStorageAccountName, config.azureStorageKey],
+                folder:  '',
+                zip: false,
+				concurrentUploadThreads: 10,
+			}));
+});
+
+gulp.task('prod-gzip', function () { 
+	return gulp.src(config.dist + '**/*.{css,js,html}')
+			.pipe(deployCdn({
+                containerName: 'prod',
+                serviceOptions: [config.azureStorageAccountName, config.azureStorageKey],
+                folder:  '',
+                zip: true,
+				concurrentUploadThreads: 10,
 			}));
 });
 
 gulp.task('build', ['combine-js','compress-html','copy-img','minify-css', 'copy-jwplayer']);
-gulp.task('deploy-dev', ['build','dev']);
-gulp.task('deploy-prod', ['build','prod']);
+gulp.task('deploy-dev', ['build','dev-gzip', 'dev-without-gzip']);
+gulp.task('deploy-prod', ['build','prod-gzip', 'prod-without-gzip']);
 gulp.task('default', ['build','watch','server']);
